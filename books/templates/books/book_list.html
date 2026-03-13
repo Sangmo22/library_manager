@@ -1,11 +1,40 @@
-{% extends "base.html" %}
-
-{% block title %}Books | Library Manager{% endblock %}
-
+{% extends "base.html" %} {% block title %}Books | Library Manager{% endblock %}
 {% block content %}
 <section class="card">
   <h2>All Books</h2>
   <p>This page shows the books currently stored in your library database.</p>
+
+  <form
+    method="get"
+    style="
+      margin: 16px 0;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    "
+  >
+    <input
+      type="text"
+      name="q"
+      value="{{ query }}"
+      placeholder="Search by title or author"
+      style="
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        min-width: 260px;
+      "
+    />
+    <button class="button" type="submit">Search</button>
+    {% if query %}
+    <a
+      href="{% url 'books:book_list' %}"
+      style="color: #4b5563; text-decoration: none"
+      >Clear</a
+    >
+    {% endif %}
+  </form>
 
   <div class="actions">
     <a class="button" href="{% url 'books:book_create' %}">Add Book</a>
@@ -38,8 +67,20 @@
           <span class="status unavailable">Checked Out</span>
           {% endif %}
         </td>
-        <td>
-          <a href="{% url 'books:book_edit' book.pk %}">Edit</a>
+        <td style="font-size: 1.2rem; display: flex; gap: 12px">
+          <a
+            href="{% url 'books:book_edit' book.pk %}"
+            title="Edit"
+            style="text-decoration: none"
+            >&#9999;&#65039;</a
+          >
+          |
+          <a
+            href="{% url 'books:book_delete' book.pk %}"
+            title="Delete"
+            style="text-decoration: none; color: #111111"
+            >&#10006;</a
+          >
         </td>
       </tr>
       {% endfor %}

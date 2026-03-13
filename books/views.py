@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import redirect, render
 
 from .forms import BookForm
@@ -5,8 +6,11 @@ from .models import Book
 
 
 def book_list(request):
+	query = request.GET.get("q", "").strip()
 	books = Book.objects.order_by("title")
-	return render(request, "books/book_list.html", {"books": books})
+	if query:
+		books = books.filter(Q(title__icontains=query) | Q(author__icontains=query))
+	return render(request, "books/book_list.html", {"books": books, "query": query})
 
 
 def book_create(request):
