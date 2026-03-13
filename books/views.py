@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -25,7 +26,8 @@ def book_create(request):
 	if request.method == "POST":
 		form = BookForm(request.POST)
 		if form.is_valid():
-			form.save()
+			book = form.save()
+			messages.success(request, f'"{book.title}" was added successfully.')
 			return redirect("books:book_list")
 	else:
 		form = BookForm()
@@ -38,7 +40,8 @@ def book_edit(request, pk):
 	if request.method == "POST":
 		form = BookForm(request.POST, instance=book)
 		if form.is_valid():
-			form.save()
+			book = form.save()
+			messages.success(request, f'"{book.title}" was updated successfully.')
 			return redirect("books:book_list")
 	else:
 		form = BookForm(instance=book)
@@ -49,6 +52,8 @@ def book_edit(request, pk):
 def book_delete(request, pk):
 	book = Book.objects.get(pk=pk)
 	if request.method == "POST":
+		title = book.title
 		book.delete()
+		messages.success(request, f'"{title}" was deleted successfully.')
 		return redirect("books:book_list")
 	return render(request, "books/book_confirm_delete.html", {"book": book})
