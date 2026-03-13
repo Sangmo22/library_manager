@@ -57,3 +57,8 @@ def book_delete(request, pk):
 		messages.success(request, f'"{title}" was deleted successfully.')
 		return redirect("books:book_list")
 	return render(request, "books/book_confirm_delete.html", {"book": book})
+
+
+def book_detail(request, pk):
+	book = Book.objects.get(pk=pk)
+	return render(request, "books/book_detail.html", {"book": book})

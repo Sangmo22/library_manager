@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Add Book | Library Manager{% endblock %}
+{% block title %}Book Form | Library Manager{% endblock %}
 
 {% block content %}
 <section class="card">
-  <h2>Add a New Book</h2>
-  <p>Fill in the details below to save a new book to your library.</p>
+  <h2>{{ form.instance.pk|yesno:"Edit Book,Add a New Book" }}</h2>
+  <p>
+    {{ form.instance.pk|yesno:"Update the details below to save your changes.,Fill in the details below to save a new book to your library." }}
+  </p>
 
   <form method="post">
     {% csrf_token %}
@@ -13,7 +15,7 @@
 
     <div class="actions">
       <button class="button" type="submit">Save Book</button>
-      <a class="button" href="{% url 'books:book_list' %}" style="background:#4b5563;">Back to List</a>
+      <a class="button secondary" href="{% url 'books:book_list' %}">Back to List</a>
     </div>
   </form>
 </section>

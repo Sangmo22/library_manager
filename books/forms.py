@@ -10,3 +10,23 @@ class BookForm(forms.ModelForm):
         widgets = {
             "published_date": forms.DateInput(attrs={"type": "date"}),
         }
+        help_texts = {
+            "isbn": "Use 10 or 13 digits only.",
+        }
+
+    def clean_isbn(self):
+        isbn = self.cleaned_data["isbn"].replace("-", "").replace(" ", "")
+        if not isbn.isdigit():
+            raise forms.ValidationError(
+                "ISBN must use digits only and be 10 or 13 digits long."
+            )
+        if len(isbn) not in {10, 13}:
+            raise forms.ValidationError("ISBN must be exactly 10 or 13 digits long.")
+
+        existing_books = Book.objects.filter(isbn=isbn)
+        if self.instance.pk:
+            existing_books = existing_books.exclude(pk=self.instance.pk)
+        if existing_books.exists():
+            raise forms.ValidationError("A book with this ISBN already exists.")
+
+        return isbn
