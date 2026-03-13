@@ -86,7 +86,40 @@
       {% endfor %}
     </tbody>
   </table>
-  {% else %}
+
+  {% if page_obj.paginator.num_pages > 1 %}
+  <div
+    style="
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    "
+  >
+    {% if page_obj.has_previous %}
+    <a
+      href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
+      class="button"
+      style="text-decoration: none"
+      >&lt;</a
+    >
+    {% endif %}
+
+    <span
+      >Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span
+    >
+
+    {% if page_obj.has_next %}
+    <a
+      href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
+      class="button"
+      style="text-decoration: none"
+      >&gt;</a
+    >
+    {% endif %}
+  </div>
+  {% endif %} {% else %}
   <div class="empty-state">
     No books have been added yet. Use the admin panel to add your first book.
   </div>
