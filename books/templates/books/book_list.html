@@ -1,4 +1,7 @@
-{% extends "base.html" %} {% block title %}Books | Library Manager{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Books | Library Manager{% endblock %}
+
 {% block content %}
 <section class="card">
   <h2>All Books</h2>
@@ -18,6 +21,7 @@
         <th>ISBN</th>
         <th>Published</th>
         <th>Status</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -33,6 +37,9 @@
           {% else %}
           <span class="status unavailable">Checked Out</span>
           {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'books:book_edit' book.pk %}">Edit</a>
         </td>
       </tr>
       {% endfor %}
