@@ -1,17 +1,23 @@
-{% extends "base.html" %} {% block title %}Login | Library Manager{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Login | Library Manager{% endblock %}
+
 {% block content %}
-<section class="card" style="max-width: 520px; margin: 0 auto">
-  <h2>Sign In</h2>
-  <p>Login to access the library dashboard.</p>
+<section class="card" style="max-width: 560px; margin: 0 auto">
+  <div class="section-header">
+    <div>
+      <h2>Sign In</h2>
+      <p class="section-subtitle">Login to access the library dashboard.</p>
+    </div>
+  </div>
 
   <form method="post">
-    {% csrf_token %} {{ form.as_p }}
+    {% csrf_token %}
+    {{ form.as_p }}
 
-    <div class="actions" style="display: flex; gap: 10px; flex-wrap: wrap">
+    <div class="actions">
       <button class="button" type="submit">Login</button>
-      <a class="button secondary" href="{% url 'books:book_list' %}"
-        >Back to Library</a
-      >
+      <a class="button secondary" href="{% url 'books:book_list' %}">Back to Library</a>
     </div>
 
     {% if form.errors %}

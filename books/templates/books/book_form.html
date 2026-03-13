@@ -4,10 +4,14 @@
 
 {% block content %}
 <section class="card">
-  <h2>{{ form.instance.pk|yesno:"Edit Book,Add a New Book" }}</h2>
-  <p>
-    {{ form.instance.pk|yesno:"Update the details below to save your changes.,Fill in the details below to save a new book to your library." }}
-  </p>
+  <div class="section-header">
+    <div>
+      <h2>{{ form.instance.pk|yesno:"Edit Book,Add a New Book" }}</h2>
+      <p class="section-subtitle">
+        {{ form.instance.pk|yesno:"Update the details below to save your changes.,Fill in the details below to save a new book to your library." }}
+      </p>
+    </div>
+  </div>
 
   <form method="post">
     {% csrf_token %}

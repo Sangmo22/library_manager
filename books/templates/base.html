@@ -5,25 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Library Manager{% endblock %}</title>
     <style>
+      :root {
+        --bg: #f3efe6;
+        --bg-accent: #efe5d2;
+        --surface: rgba(255, 255, 255, 0.82);
+        --surface-strong: #fffdf8;
+        --text: #1f2933;
+        --muted: #667085;
+        --line: rgba(113, 87, 44, 0.14);
+        --brand: #245c4f;
+        --brand-dark: #183d36;
+        --brand-soft: #dff2ea;
+        --accent: #c47b2c;
+        --accent-soft: #fff1de;
+        --danger: #7a1f1f;
+        --danger-soft: #fce8e8;
+        --success: #1f6a47;
+        --success-soft: #e1f6ea;
+        --shadow: 0 18px 48px rgba(52, 39, 17, 0.12);
+        --radius-lg: 24px;
+        --radius-md: 16px;
+        --radius-sm: 12px;
+      }
+
       body {
         margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #f5f7fb;
-        color: #1f2937;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(196, 123, 44, 0.18), transparent 28%),
+          radial-gradient(circle at top right, rgba(36, 92, 79, 0.16), transparent 24%),
+          linear-gradient(180deg, var(--bg) 0%, #f8f4ec 100%);
+        color: var(--text);
+        min-height: 100vh;
       }
 
       header {
-        background: #434e66;
         color: #ffffff;
-        padding: 20px 32px;
+        padding: 28px 32px 42px;
+        background:
+          linear-gradient(135deg, rgba(24, 61, 54, 0.94), rgba(36, 92, 79, 0.9)),
+          linear-gradient(45deg, rgba(196, 123, 44, 0.18), transparent);
+        border-bottom-left-radius: 28px;
+        border-bottom-right-radius: 28px;
+        box-shadow: 0 18px 44px rgba(24, 61, 54, 0.18);
       }
 
       .header-row {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        gap: 12px;
+        align-items: center;
+        gap: 16px;
         flex-wrap: wrap;
+        max-width: 1120px;
+        margin: 0 auto;
+      }
+
+      .brand-eyebrow {
+        margin: 0 0 8px;
+        font-size: 0.78rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.74);
+      }
+
+      .brand-title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .brand-logo {
+        width: 54px;
+        height: 54px;
+        flex: 0 0 54px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      }
+
+      .brand-logo svg {
+        width: 34px;
+        height: 34px;
+      }
+
+      header h1 {
+        margin: 0;
+        font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1.05;
+      }
+
+      header p {
+        margin: 10px 0 0;
+        max-width: 620px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1rem;
       }
 
       .auth-links {
@@ -37,6 +116,9 @@
         color: #ffffff;
         text-decoration: none;
         font-weight: 600;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
       }
 
       .auth-links form {
@@ -47,43 +129,55 @@
         background: transparent;
         border: 1px solid rgba(255, 255, 255, 0.7);
         color: #ffffff;
-        border-radius: 8px;
-        padding: 6px 10px;
+        border-radius: 999px;
+        padding: 8px 12px;
         cursor: pointer;
         font: inherit;
       }
 
       main {
-        max-width: 900px;
-        margin: 32px auto;
-        padding: 0 16px;
+        max-width: 1120px;
+        margin: -18px auto 48px;
+        padding: 0 20px;
       }
 
       .card {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-        padding: 24px;
+        background: var(--surface);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 28px;
       }
 
       .actions {
-        margin-top: 16px;
+        margin-top: 18px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
       .button {
         display: inline-block;
-        padding: 10px 14px;
-        border-radius: 8px;
-        background: #1d4ed8;
+        padding: 11px 16px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--brand), #2f7262);
         color: #ffffff;
         text-decoration: none;
         font-weight: 600;
         border: none;
         cursor: pointer;
+        box-shadow: 0 12px 24px rgba(36, 92, 79, 0.18);
       }
 
       .button.secondary {
-        background: #4b5563;
+        background: linear-gradient(135deg, #625449, #7f7060);
+      }
+
+      .button.ghost {
+        background: rgba(36, 92, 79, 0.08);
+        color: var(--brand-dark);
+        box-shadow: none;
       }
 
       form {
@@ -107,10 +201,10 @@
         width: 100%;
         box-sizing: border-box;
         padding: 12px 14px;
-        border: 1px solid #d1d5db;
-        border-radius: 10px;
-        background: #ffffff;
-        color: #111827;
+        border: 1px solid rgba(113, 87, 44, 0.16);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--text);
         font: inherit;
       }
 
@@ -118,8 +212,8 @@
       select:focus,
       textarea:focus {
         outline: none;
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(196, 123, 44, 0.14);
       }
 
       input[type="checkbox"] {
@@ -139,41 +233,204 @@
         color: #b91c1c;
       }
 
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: end;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+      }
+
+      .section-header h2,
+      .card h2 {
+        margin: 0;
+        font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+        font-size: clamp(1.7rem, 3vw, 2.35rem);
+        color: #1c302a;
+      }
+
+      .section-subtitle,
+      .card p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+
+      .search-form {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 0;
+      }
+
+      .search-form input {
+        min-width: 280px;
+      }
+
+      .table-shell {
+        overflow: hidden;
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: var(--surface-strong);
+        padding: 8px 10px;
+      }
+
       table {
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 0;
       }
 
       th,
       td {
-        padding: 12px;
-        border-bottom: 1px solid #e5e7eb;
+        padding: 18px 22px;
+        border-bottom: 1px solid rgba(113, 87, 44, 0.12);
         text-align: left;
+        vertical-align: middle;
+      }
+
+      tbody tr:hover {
+        background: rgba(196, 123, 44, 0.06);
       }
 
       th {
-        font-size: 0.9rem;
+        font-size: 0.78rem;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: #6b7280;
+        letter-spacing: 0.12em;
+        color: #7a7062;
+        background: rgba(239, 229, 210, 0.55);
+      }
+
+      th:first-child {
+        border-top-left-radius: 16px;
+      }
+
+      th:last-child {
+        border-top-right-radius: 16px;
+      }
+
+      td:first-child,
+      th:first-child {
+        padding-left: 26px;
+      }
+
+      td:last-child,
+      th:last-child {
+        padding-right: 26px;
       }
 
       .status {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
         font-weight: 600;
+        font-size: 0.88rem;
       }
 
       .status.available {
-        color: #15803d;
+        color: var(--success);
+        background: var(--success-soft);
       }
 
       .status.unavailable {
-        color: #b91c1c;
+        color: var(--danger);
+        background: var(--danger-soft);
+      }
+
+      .count-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: #7d521d;
+        font-weight: 600;
+      }
+
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 14px;
+        margin: 20px 0;
+      }
+
+      .meta-card {
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid var(--line);
+      }
+
+      .meta-card span {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .meta-card strong {
+        font-size: 1.05rem;
+      }
+
+      .action-icons {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .icon-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        text-decoration: none;
+        color: var(--brand-dark);
+        background: rgba(36, 92, 79, 0.1);
+      }
+
+      .icon-link.delete {
+        background: rgba(122, 31, 31, 0.08);
+        color: var(--danger);
+      }
+
+      .pagination {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .page-indicator {
+        color: var(--muted);
+        font-weight: 600;
       }
 
       .empty-state {
-        padding: 24px 0;
-        color: #6b7280;
+        padding: 42px 24px;
+        color: var(--muted);
+        text-align: center;
+        background: rgba(255, 255, 255, 0.56);
+        border: 1px dashed rgba(113, 87, 44, 0.24);
+        border-radius: 20px;
       }
 
       .messages {
@@ -182,15 +439,42 @@
 
       .message {
         padding: 12px 16px;
-        border-radius: 10px;
+        border-radius: 16px;
         margin-bottom: 10px;
         font-weight: 600;
       }
 
       .message.success {
-        background: #dcfce7;
-        color: #166534;
-        border: 1px solid #86efac;
+        background: var(--success-soft);
+        color: var(--success);
+        border: 1px solid rgba(31, 106, 71, 0.16);
+      }
+
+      @media (max-width: 720px) {
+        header {
+          padding: 24px 18px 36px;
+        }
+
+        .brand-title {
+          align-items: flex-start;
+        }
+
+        main {
+          padding: 0 14px;
+          margin-top: -14px;
+        }
+
+        .card {
+          padding: 22px;
+        }
+
+        .search-form input {
+          min-width: 100%;
+        }
+
+        .table-shell {
+          overflow-x: auto;
+        }
       }
     </style>
   </head>
@@ -198,7 +482,19 @@
     <header>
       <div class="header-row">
         <div>
-          <h1>Book Library Manager</h1>
+          <p class="brand-eyebrow">Reading Room Dashboard</p>
+          <div class="brand-title">
+            <span class="brand-logo" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="10" y="42" width="40" height="8" rx="3" fill="#F5D78E"/>
+                <rect x="14" y="34" width="38" height="8" rx="3" fill="#D98E47"/>
+                <rect x="8" y="26" width="42" height="8" rx="3" fill="#8FC3B0"/>
+                <rect x="16" y="18" width="36" height="8" rx="3" fill="#F2EFE8"/>
+                <rect x="50" y="18" width="4" height="32" rx="2" fill="#C47B2C"/>
+              </svg>
+            </span>
+            <h1>Book Library Manager</h1>
+          </div>
           <p>Manage your books and track availability.</p>
         </div>
         <div class="auth-links">

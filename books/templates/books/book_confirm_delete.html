@@ -4,15 +4,26 @@
 
 {% block content %}
 <section class="card">
-  <h2>Delete Book</h2>
-  <p>Are you sure you want to delete <strong>{{ book.title }}</strong> by {{ book.author }}?</p>
+  <div class="section-header">
+    <div>
+      <h2>Delete Book</h2>
+      <p class="section-subtitle">This action permanently removes the selected title from your collection.</p>
+    </div>
+  </div>
+
+  <div class="meta-card" style="margin-bottom: 18px; background: var(--danger-soft)">
+    <span>Selected Book</span>
+    <strong>{{ book.title }}</strong>
+    <p style="margin: 10px 0 0">by {{ book.author }}</p>
+  </div>
+
   <p>This action cannot be undone.</p>
 
   <form method="post">
     {% csrf_token %}
     <div class="actions">
-      <button class="button" type="submit" style="background:#dc2626;">Yes, Delete</button>
-      <a class="button" href="{% url 'books:book_list' %}" style="background:#4b5563;">Cancel</a>
+      <button class="button" type="submit" style="background: linear-gradient(135deg, #8b2727, #6f1c1c)">Yes, Delete</button>
+      <a class="button secondary" href="{% url 'books:book_list' %}">Cancel</a>
     </div>
   </form>
 </section>

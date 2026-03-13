@@ -1,131 +1,95 @@
-{% extends "base.html" %} {% block title %}Books | Library Manager{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Books | Library Manager{% endblock %}
+
 {% block content %}
 <section class="card">
-  <h2>All Books</h2>
-  <p>This page shows the books currently stored in your library database.</p>
+  <div class="section-header">
+    <div>
+      <h2>Library Catalogue</h2>
+      <p class="section-subtitle">
+        Browse your collection, jump into details, and manage circulation from one place.
+      </p>
+    </div>
+    <div class="count-badge">{{ page_obj.paginator.count }} books in collection</div>
+  </div>
 
-  <form
-    method="get"
-    style="
-      margin: 16px 0;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    "
-  >
-    <input
-      type="text"
-      name="q"
-      value="{{ query }}"
-      placeholder="Search by title or author"
-      style="
-        padding: 10px 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        min-width: 260px;
-      "
-    />
-    {% if query %}
-    <a
-      href="{% url 'books:book_list' %}"
-      style="color: #4b5563; text-decoration: none"
-      >Clear</a
-    >
-    {% endif %}
-  </form>
+  <div class="toolbar">
+    <form method="get" class="search-form">
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Search by title or author"
+      />
+      {% if query %}
+      <a href="{% url 'books:book_list' %}" class="button ghost">Clear</a>
+      {% endif %}
+    </form>
 
-  <div class="actions">
-    <a class="button" href="{% url 'books:book_create' %}">Add Book</a>
-    <a class="button" href="/admin/">Open Admin</a>
+    <div class="actions" style="margin-top: 0">
+      <a class="button" href="{% url 'books:book_create' %}">Add Book</a>
+      <a class="button secondary" href="/admin/">Open Admin</a>
+    </div>
   </div>
 
   {% if books %}
-  <table>
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>ISBN</th>
-        <th>Published</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for book in books %}
-      <tr>
-        <td>
-          <a
-            href="{% url 'books:book_detail' book.pk %}"
-            style="text-decoration: none; color: #1d4ed8; font-weight: 600"
-          >
-            {{ book.title }}
-          </a>
-        </td>
-        <td>{{ book.author }}</td>
-        <td>{{ book.isbn }}</td>
-        <td>{{ book.published_date|default:"-" }}</td>
-        <td>
-          {% if book.available %}
-          <span class="status available">Available</span>
-          {% else %}
-          <span class="status unavailable">Checked Out</span>
-          {% endif %}
-        </td>
-        <td style="font-size: 1.2rem; display: flex; gap: 12px">
-          <a
-            href="{% url 'books:book_edit' book.pk %}"
-            title="Edit"
-            style="text-decoration: none"
-            >&#9999;&#65039;</a
-          >
-          |
-          <a
-            href="{% url 'books:book_delete' book.pk %}"
-            title="Delete"
-            style="text-decoration: none; color: #111111"
-            >&#10006;</a
-          >
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-shell">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Published</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <td>
+            <a href="{% url 'books:book_detail' book.pk %}" style="text-decoration: none; color: var(--brand); font-weight: 700">
+              {{ book.title }}
+            </a>
+          </td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.isbn }}</td>
+          <td>{{ book.published_date|default:"-" }}</td>
+          <td>
+            {% if book.available %}
+            <span class="status available">Available</span>
+            {% else %}
+            <span class="status unavailable">Checked Out</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="action-icons">
+              <a href="{% url 'books:book_edit' book.pk %}" title="Edit" class="icon-link">&#9998;</a>
+              <a href="{% url 'books:book_delete' book.pk %}" title="Delete" class="icon-link delete">&#10005;</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   {% if page_obj.paginator.num_pages > 1 %}
-  <div
-    style="
-      margin-top: 20px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    "
-  >
+  <div class="pagination">
     {% if page_obj.has_previous %}
-    <a
-      href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}"
-      class="button"
-      style="text-decoration: none"
-      >&lt;</a
-    >
+    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="button">&lt;</a>
     {% endif %}
 
-    <span
-      >Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span
-    >
+    <span class="page-indicator">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
     {% if page_obj.has_next %}
-    <a
-      href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}"
-      class="button"
-      style="text-decoration: none"
-      >&gt;</a
-    >
+    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="button">&gt;</a>
     {% endif %}
   </div>
-  {% endif %} {% else %}
+  {% endif %}
+  {% else %}
   <div class="empty-state">
     No books have been added yet. Use the admin panel to add your first book.
   </div>
