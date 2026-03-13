@@ -32,3 +32,11 @@ def book_edit(request, pk):
 		form = BookForm(instance=book)
 
 	return render(request, "books/book_form.html", {"form": form})
+
+
+def book_delete(request, pk):
+	book = Book.objects.get(pk=pk)
+	if request.method == "POST":
+		book.delete()
+		return redirect("books:book_list")
+	return render(request, "books/book_confirm_delete.html", {"book": book})
