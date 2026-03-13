@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} | Library Manager{% endblock %}
+
+{% block content %}
+<section class="card">
+  <h2>{{ book.title }}</h2>
+  <p><strong>Author:</strong> {{ book.author }}</p>
+  <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+  <p><strong>Published:</strong> {{ book.published_date|default:"-" }}</p>
+  <p>
+    <strong>Status:</strong>
+    {% if book.available %}
+    <span class="status available">Available</span>
+    {% else %}
+    <span class="status unavailable">Checked Out</span>
+    {% endif %}
+  </p>
+
+  <div class="actions" style="display: flex; gap: 10px; flex-wrap: wrap">
+    <a class="button" href="{% url 'books:book_edit' book.pk %}">Edit</a>
+    <a class="button secondary" href="{% url 'books:book_list' %}">Back to List</a>
+  </div>
+</section>
+{% endblock %}

@@ -56,7 +56,14 @@
     <tbody>
       {% for book in books %}
       <tr>
-        <td>{{ book.title }}</td>
+        <td>
+          <a
+            href="{% url 'books:book_detail' book.pk %}"
+            style="text-decoration: none; color: #1d4ed8; font-weight: 600"
+          >
+            {{ book.title }}
+          </a>
+        </td>
         <td>{{ book.author }}</td>
         <td>{{ book.isbn }}</td>
         <td>{{ book.published_date|default:"-" }}</td>
