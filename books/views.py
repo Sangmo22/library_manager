@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -7,6 +8,13 @@ from .forms import BookForm
 from .models import Book
 
 
+def is_librarian(user):
+	return user.is_authenticated and (
+		user.is_staff or user.groups.filter(name="Librarian").exists()
+	)
+
+
+@login_required
 def book_list(request):
 	query = request.GET.get("q", "").strip()
 	books = Book.objects.order_by("title")
@@ -22,6 +30,7 @@ def book_list(request):
 	)
 
 
+@user_passes_test(is_librarian)
 def book_create(request):
 	if request.method == "POST":
 		form = BookForm(request.POST)
@@ -35,6 +44,7 @@ def book_create(request):
 	return render(request, "books/book_form.html", {"form": form})
 
 
+@user_passes_test(is_librarian)
 def book_edit(request, pk):
 	book = Book.objects.get(pk=pk)
 	if request.method == "POST":
@@ -49,6 +59,7 @@ def book_edit(request, pk):
 	return render(request, "books/book_form.html", {"form": form})
 
 
+@user_passes_test(is_librarian)
 def book_delete(request, pk):
 	book = Book.objects.get(pk=pk)
 	if request.method == "POST":
@@ -59,6 +70,7 @@ def book_delete(request, pk):
 	return render(request, "books/book_confirm_delete.html", {"book": book})
 
 
+@login_required
 def book_detail(request, pk):
 	book = Book.objects.get(pk=pk)
 	return render(request, "books/book_detail.html", {"book": book})
