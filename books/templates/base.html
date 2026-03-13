@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Library Manager{% endblock %}</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+
+      header {
+        background: #434e66;
+        color: #ffffff;
+        padding: 20px 32px;
+      }
+
+      main {
+        max-width: 900px;
+        margin: 32px auto;
+        padding: 0 16px;
+      }
+
+      .card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        padding: 24px;
+      }
+
+      .actions {
+        margin-top: 16px;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: #1d4ed8;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .button.secondary {
+        background: #4b5563;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+      }
+
+      th {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #6b7280;
+      }
+
+      .status {
+        font-weight: 600;
+      }
+
+      .status.available {
+        color: #15803d;
+      }
+
+      .status.unavailable {
+        color: #b91c1c;
+      }
+
+      .empty-state {
+        padding: 24px 0;
+        color: #6b7280;
+      }
+
+      form {
+        margin-top: 20px;
+      }
+
+      form p {
+        margin-bottom: 16px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font: inherit;
+      }
+
+      input[type="checkbox"] {
+        width: auto;
+      }
+
+      .helptext {
+        display: block;
+        margin-top: 4px;
+        color: #6b7280;
+        font-size: 0.9rem;
+      }
+
+      .errorlist {
+        color: #b91c1c;
+        padding-left: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Book Library Manager</h1>
+      <p>Manage your books and track availability.</p>
+    </header>
+    <main>{% block content %}{% endblock %}</main>
+  </body>
+</html>

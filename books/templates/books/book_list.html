@@ -1,0 +1,47 @@
+{% extends "base.html" %} {% block title %}Books | Library Manager{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>All Books</h2>
+  <p>This page shows the books currently stored in your library database.</p>
+
+  <div class="actions button-row">
+    <a class="button" href="{% url 'books:book_create' %}">Add Book</a>
+    <a class="button" href="/admin/">Open Admin</a>
+  </div>
+
+  {% if books %}
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>ISBN</th>
+        <th>Published</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.isbn }}</td>
+        <td>{{ book.published_date|default:"-" }}</td>
+        <td>
+          {% if book.available %}
+          <span class="status available">Available</span>
+          {% else %}
+          <span class="status unavailable">Checked Out</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">
+    No books have been added yet. Use the admin panel to add your first book.
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
