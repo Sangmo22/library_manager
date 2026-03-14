@@ -16,8 +16,8 @@
     {{ form.as_p }}
 
     <div class="actions">
-      <button class="button" type="submit">Login</button>
-      <a class="button secondary" href="{% url 'books:book_list' %}">Back to Library</a>
+      <button class="button" type="submit">Sign In</button>
+      <a class="button secondary" href="{% url 'signup' %}">Create Account</a>
     </div>
 
     {% if form.errors %}

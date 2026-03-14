@@ -31,14 +31,18 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-default_hosts = '127.0.0.1,localhost' if DEBUG else ''
+default_hosts = ['127.0.0.1', 'localhost']
+allowed_hosts_env = os.environ.get('ALLOWED_HOSTS', '')
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.environ.get('ALLOWED_HOSTS', default_hosts).split(',')
+    for host in allowed_hosts_env.split(',')
     if host.strip()
 ]
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = default_hosts.copy()
 
 render_external_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+is_render = bool(os.environ.get('RENDER') or render_external_hostname)
 if render_external_hostname and render_external_hostname not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(render_external_hostname)
 
@@ -99,13 +103,22 @@ WSGI_APPLICATION = 'library_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-        ssl_require=not DEBUG,
-    )
-}
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    DATABASES = {
+        'default': dj_database_url.parse(
+            database_url,
+            conn_max_age=600,
+            ssl_require=not DEBUG,
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -147,9 +160,12 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True').lower() == 'true'
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
+SECURE_SSL_REDIRECT = os.environ.get(
+    'SECURE_SSL_REDIRECT',
+    'True' if is_render else 'False'
+).lower() == 'true'
+SESSION_COOKIE_SECURE = is_render
+CSRF_COOKIE_SECURE = is_render
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'

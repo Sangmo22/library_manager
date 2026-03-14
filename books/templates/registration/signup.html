@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account | Library Manager{% endblock %}
+
+{% block content %}
+<section class="card" style="max-width: 560px; margin: 0 auto">
+  <div class="section-header">
+    <div>
+      <h2>Create Account</h2>
+      <p class="section-subtitle">Create your account to access the library dashboard.</p>
+    </div>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="actions">
+      <button class="button" type="submit">Create Account</button>
+      <a class="button ghost" href="{% url 'login' %}">Already have an account?</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

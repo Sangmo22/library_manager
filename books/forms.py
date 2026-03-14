@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 from .models import Book
 
@@ -30,3 +32,11 @@ class BookForm(forms.ModelForm):
             raise forms.ValidationError("A book with this ISBN already exists.")
 
         return isbn
+
+
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(required=False)
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ("username", "email", "password1", "password2")

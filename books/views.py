@@ -1,10 +1,11 @@
 from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect, render
 
-from .forms import BookForm
+from .forms import BookForm, SignUpForm
 from .models import Book
 
 
@@ -12,6 +13,23 @@ def is_librarian(user):
 	return user.is_authenticated and (
 		user.is_staff or user.groups.filter(name="Librarian").exists()
 	)
+
+
+def signup(request):
+	if request.user.is_authenticated:
+		return redirect("books:book_list")
+
+	if request.method == "POST":
+		form = SignUpForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			messages.success(request, "Your account was created successfully.")
+			return redirect("books:book_list")
+	else:
+		form = SignUpForm()
+
+	return render(request, "registration/signup.html", {"form": form})
 
 
 @login_required
