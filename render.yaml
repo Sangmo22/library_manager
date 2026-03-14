@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: djangocrud
+    env: python
+    plan: free
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn library_manager.wsgi:application"
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: "2"
+      - key: SECURE_SSL_REDIRECT
+        value: "True"
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
