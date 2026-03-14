@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -32,7 +31,6 @@ def signup(request):
 	return render(request, "registration/signup.html", {"form": form})
 
 
-@login_required
 def book_list(request):
 	query = request.GET.get("q", "").strip()
 	books = Book.objects.order_by("title")
@@ -44,11 +42,15 @@ def book_list(request):
 	return render(
 		request,
 		"books/book_list.html",
-		{"books": page_obj, "page_obj": page_obj, "query": query},
+		{
+			"books": page_obj,
+			"page_obj": page_obj,
+			"query": query,
+			"can_manage_books": is_librarian(request.user),
+		},
 	)
 
 
-@user_passes_test(is_librarian)
 def book_create(request):
 	if request.method == "POST":
 		form = BookForm(request.POST)
@@ -62,7 +64,6 @@ def book_create(request):
 	return render(request, "books/book_form.html", {"form": form})
 
 
-@user_passes_test(is_librarian)
 def book_edit(request, pk):
 	book = Book.objects.get(pk=pk)
 	if request.method == "POST":
@@ -77,7 +78,6 @@ def book_edit(request, pk):
 	return render(request, "books/book_form.html", {"form": form})
 
 
-@user_passes_test(is_librarian)
 def book_delete(request, pk):
 	book = Book.objects.get(pk=pk)
 	if request.method == "POST":
@@ -87,8 +87,10 @@ def book_delete(request, pk):
 		return redirect("books:book_list")
 	return render(request, "books/book_confirm_delete.html", {"book": book})
 
-
-@login_required
 def book_detail(request, pk):
 	book = Book.objects.get(pk=pk)
-	return render(request, "books/book_detail.html", {"book": book})
+	return render(
+		request,
+		"books/book_detail.html",
+		{"book": book, "can_manage_books": is_librarian(request.user)},
+	)

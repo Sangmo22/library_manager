@@ -37,6 +37,7 @@
 
   <div class="actions">
     <a class="button" href="{% url 'books:book_edit' book.pk %}">Edit</a>
+    <a class="button ghost" href="{% url 'books:book_delete' book.pk %}">Delete</a>
     <a class="button secondary" href="{% url 'books:book_list' %}">Back to List</a>
   </div>
 </section>
